@@ -1,0 +1,23 @@
+import tensorflow as tf
+from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.applications.resnet50 import preprocess_input, decode_predictions
+from tensorflow.keras.preprocessing import image
+import numpy as np
+
+# Load the pre-trained ResNet50 model
+model = ResNet50(weights='imagenet')
+
+# Load and preprocess the input image
+img_path = 'path_to_your_image.jpg'  # Provide the path to your image file
+img = image.load_img(img_path, target_size=(224, 224))
+x = image.img_to_array(img)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+
+# Predict the class probabilities
+predictions = model.predict(x)
+decoded_predictions = decode_predictions(predictions, top=3)[0]
+
+# Print the top predictions
+for label, description, score in decoded_predictions:
+    print(f"{description}: {score:.2f}")
